@@ -9,11 +9,10 @@
 
 <style>
 :root {
-    --tg-theme-bg-color: #111323;
-    --tg-theme-text-color: #ffffff;
-    --tg-theme-hint-color: #9298b5;
     --purple: #7957ff;
     --gold: #ffca45;
+    --panel: #222742;
+    --hint: #9298b5;
 }
 
 * {
@@ -26,7 +25,7 @@
 body {
     min-height: 100vh;
     background: radial-gradient(circle at 50% 35%, #29204f, #17192d 50%, #101222);
-    color: var(--tg-theme-text-color);
+    color: var(--tg-theme-text-color, #fff);
     font-family: Arial, sans-serif;
     overflow-x: hidden;
     user-select: none;
@@ -54,7 +53,7 @@ body {
 }
 
 .subtitle {
-    color: var(--tg-theme-hint-color);
+    color: var(--tg-theme-hint-color, #9298b5);
     font-size: 14px;
     margin-top: 7px;
 }
@@ -77,8 +76,9 @@ body {
     font-size: 43px;
     font-weight: 900;
     margin-top: 9px;
-    color: #ffca45;
+    color: var(--gold);
     font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
 }
 
 .balance-unit {
@@ -97,7 +97,7 @@ body {
 .stat-card {
     text-align: center;
     padding: 13px 4px;
-    background: #222742;
+    background: var(--panel);
     border: 1px solid rgba(130,120,255,.18);
     border-radius: 15px;
 }
@@ -121,7 +121,7 @@ body {
     justify-content: center;
     align-items: center;
     position: relative;
-    overflow: visible;
+    overflow: hidden;
 }
 
 .coin-button {
@@ -129,6 +129,7 @@ body {
     height: 245px;
     padding: 0;
     border: none;
+    outline: none;
     background: transparent;
     cursor: pointer;
     display: flex;
@@ -137,7 +138,7 @@ body {
     touch-action: manipulation;
     position: relative;
     z-index: 2;
-    -webkit-appearance: none;
+    appearance: none;
 }
 
 .coin-art {
@@ -157,6 +158,7 @@ body {
     justify-content: center;
     animation: floating 3s ease-in-out infinite;
     pointer-events: none;
+    transition: transform .12s;
 }
 
 .coin-inner {
@@ -316,7 +318,7 @@ body {
 
 .upgrade-price {
     color: #ffda78;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 800;
 }
 
@@ -341,10 +343,6 @@ body {
     background: #383d56;
     color: #9298b5;
     cursor: not-allowed;
-}
-
-.upgrade-button .button-label {
-    display: block;
 }
 
 .save-button {
@@ -389,6 +387,7 @@ body {
 </head>
 
 <body>
+
 <main class="container">
 
 <header class="header">
@@ -419,7 +418,7 @@ body {
 
 <section class="click-area" id="clickArea">
 
-    <button type="button" class="coin-button" id="coinButton" aria-label="Нажать на монету">
+    <button type="button" class="coin-button" id="coinButton">
         <div class="coin-art">
             <div class="coin-inner">
                 <div class="coin-letter">C</div>
@@ -431,12 +430,12 @@ body {
 </section>
 
 <section class="shop">
+
     <div class="shop-title">Магазин улучшений</div>
     <div class="shop-subtitle">Улучшай способности и зарабатывай больше</div>
 
     <div class="shop-cards">
 
-        <!-- СИЛА КЛИКА -->
         <article class="upgrade-card">
             <div class="upgrade-top">
                 <div class="upgrade-icon">
@@ -454,13 +453,10 @@ body {
             <div class="upgrade-effect" id="clickEffect">+1 очко за клик</div>
             <div class="upgrade-bottom">
                 <div class="upgrade-price" id="clickPrice">Цена: 100 очков</div>
-                <button type="button" class="upgrade-button" id="clickBuy">
-                    <span class="button-label">АПГРЕЙД</span>
-                </button>
+                <button type="button" class="upgrade-button" id="clickBuy">АПГРЕЙД</button>
             </div>
         </article>
 
-        <!-- АВТОКЛИКЕР -->
         <article class="upgrade-card">
             <div class="upgrade-top">
                 <div class="upgrade-icon">
@@ -479,13 +475,10 @@ body {
             <div class="upgrade-effect" id="autoEffect">+0 очков/сек</div>
             <div class="upgrade-bottom">
                 <div class="upgrade-price" id="autoPrice">Цена: 100 очков</div>
-                <button type="button" class="upgrade-button" id="autoBuy">
-                    <span class="button-label">АПГРЕЙД</span>
-                </button>
+                <button type="button" class="upgrade-button" id="autoBuy">АПГРЕЙД</button>
             </div>
         </article>
 
-        <!-- КРИТИЧЕСКИЙ УДАР -->
         <article class="upgrade-card">
             <div class="upgrade-top">
                 <div class="upgrade-icon">
@@ -503,13 +496,10 @@ body {
             <div class="upgrade-effect" id="critEffect">Шанс: 0% | x10</div>
             <div class="upgrade-bottom">
                 <div class="upgrade-price" id="critPrice">Цена: 100 очков</div>
-                <button type="button" class="upgrade-button" id="critBuy">
-                    <span class="button-label">АПГРЕЙД</span>
-                </button>
+                <button type="button" class="upgrade-button" id="critBuy">АПГРЕЙД</button>
             </div>
         </article>
 
-        <!-- МНОЖИТЕЛЬ -->
         <article class="upgrade-card">
             <div class="upgrade-top">
                 <div class="upgrade-icon">
@@ -528,9 +518,7 @@ body {
             <div class="upgrade-effect" id="multiplierEffect">Множитель: x1.00</div>
             <div class="upgrade-bottom">
                 <div class="upgrade-price" id="multiplierPrice">Цена: 100 очков</div>
-                <button type="button" class="upgrade-button" id="multiplierBuy">
-                    <span class="button-label">АПГРЕЙД</span>
-                </button>
+                <button type="button" class="upgrade-button" id="multiplierBuy">АПГРЕЙД</button>
             </div>
         </article>
 
@@ -546,15 +534,18 @@ body {
     Сохранить результат
 </button>
 
-<footer class="footer">Весь прогресс сохраняется автоматически</footer>
+<footer class="footer">
+    Весь прогресс сохраняется автоматически
+</footer>
 
 </main>
 
 <script>
 "use strict";
 
-// TELEGRAM
-const tg = window.Telegram && window.Telegram.WebApp;
+/* TELEGRAM */
+
+const tg = window.Telegram?.WebApp || null;
 
 if (tg) {
     tg.ready();
@@ -563,7 +554,8 @@ if (tg) {
     tg.setBackgroundColor("#111323");
 }
 
-// НАСТРОЙКИ
+/* НАСТРОЙКИ */
+
 const STORAGE_KEY = "clicker_game_save_v2";
 const MAX_SCORE = Number.MAX_SAFE_INTEGER;
 
@@ -574,7 +566,8 @@ const config = {
     multiplier: { base: 100, growth: 2.5 }
 };
 
-// ИГРОВЫЕ ДАННЫЕ
+/* ИГРОВЫЕ ДАННЫЕ */
+
 let game = {
     score: 0,
     clickLevel: 0,
@@ -583,7 +576,8 @@ let game = {
     multiplierLevel: 0
 };
 
-// ЗАГРУЗКА
+/* ЗАГРУЗКА */
+
 function loadGame() {
     try {
         const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
@@ -616,7 +610,8 @@ function loadGame() {
     }
 }
 
-// СОХРАНЕНИЕ
+/* СОХРАНЕНИЕ */
+
 function saveGame() {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(game));
@@ -625,14 +620,16 @@ function saveGame() {
     }
 }
 
-// ФОРМАТ ЧИСЕЛ
+/* ФОРМАТИРОВАНИЕ */
+
 function fmt(value) {
     return Number(value.toFixed(2)).toLocaleString("ru-RU", {
         maximumFractionDigits: 2
     });
 }
 
-// РАСЧЕТЫ
+/* РАСЧЕТЫ */
+
 function multiplier() {
     return Math.pow(1.5, game.multiplierLevel);
 }
@@ -660,12 +657,14 @@ function price(type) {
     return Math.ceil(result);
 }
 
-// БАЛАНС
+/* БАЛАНС */
+
 function updateBalance() {
     document.getElementById("balance").textContent = fmt(game.score);
 }
 
-// СТАТИСТИКА
+/* СТАТИСТИКА */
+
 function updateStats() {
     document.getElementById("clickStat").textContent =
         fmt(clickPower() * multiplier());
@@ -677,13 +676,14 @@ function updateStats() {
         critChance() + "%";
 }
 
-// КНОПКИ МАГАЗИНА
+/* ЦЕНЫ И КНОПКИ */
+
 function updateButton(type) {
     const cost = price(type);
     const button = document.getElementById(type + "Buy");
     const priceText = document.getElementById(type + "Price");
 
-    if (cost === Infinity) {
+    if (!Number.isFinite(cost)) {
         priceText.textContent = "Цена: недоступно";
         button.disabled = true;
         return;
@@ -693,7 +693,8 @@ function updateButton(type) {
     button.disabled = game.score < cost;
 }
 
-// МАГАЗИН
+/* МАГАЗИН */
+
 function updateShop() {
     const mult = multiplier();
 
@@ -724,21 +725,25 @@ function updateShop() {
     ["click", "auto", "crit", "multiplier"].forEach(updateButton);
 }
 
-// ПОЛНОЕ ОБНОВЛЕНИЕ
+/* ОБНОВЛЕНИЕ ИНТЕРФЕЙСА */
+
 function updateUI() {
     updateBalance();
     updateStats();
     updateShop();
 }
 
-// ВСПЛЫВАЮЩИЕ ОЧКИ
+/* ВСПЛЫВАЮЩИЕ ОЧКИ */
+
 function floatingScore(text, type) {
     const area = document.getElementById("clickArea");
     const el = document.createElement("div");
 
     el.className = "floating-score";
 
-    if (type) el.classList.add(type);
+    if (type) {
+        el.classList.add(type);
+    }
 
     el.textContent = text;
 
@@ -752,7 +757,8 @@ function floatingScore(text, type) {
     setTimeout(() => el.remove(), 900);
 }
 
-// НАЧИСЛЕНИЕ ОЧКОВ
+/* НАЧИСЛЕНИЕ ОЧКОВ */
+
 function addScore(amount) {
     if (!Number.isFinite(amount) || amount <= 0) return 0;
 
@@ -768,13 +774,9 @@ function addScore(amount) {
     return added;
 }
 
-// КЛИК ПО МОНЕТЕ
-const coinButton = document.getElementById("coinButton");
+/* КЛИК ПО МОНЕТЕ */
 
-coinButton.addEventListener("pointerdown", function(event) {
-    // Блокируем повторную обработку одного нажатия.
-    event.preventDefault();
-}, { passive: false });
+const coinButton = document.getElementById("coinButton");
 
 coinButton.addEventListener("click", function(event) {
     event.preventDefault();
@@ -800,13 +802,16 @@ coinButton.addEventListener("click", function(event) {
     }
 
     if (tg && tg.HapticFeedback) {
-        tg.HapticFeedback.impactOccurred(critical ? "heavy" : "light");
+        tg.HapticFeedback.impactOccurred(
+            critical ? "heavy" : "light"
+        );
     }
 
     saveGame();
 });
 
-// ПОКУПКА
+/* ПОКУПКА УЛУЧШЕНИЙ */
+
 function buyUpgrade(type) {
     if (!config[type]) return;
 
@@ -827,5 +832,28 @@ function buyUpgrade(type) {
     floatingScore("АПГРЕЙД!", "critical");
 }
 
-// ПОДКЛЮЧАЕМ КНОПКИ
-["click", "auto", "crit", "multiplier"].forEach(type => 
+/* ПОДКЛЮЧЕНИЕ КНОПОК */
+
+["click", "auto", "crit", "multiplier"].forEach(type => {
+    document.getElementById(type + "Buy").addEventListener("click", () => {
+        buyUpgrade(type);
+    });
+});
+
+/* АВТОКЛИКЕР */
+
+setInterval(() => {
+    if (game.autoLevel <= 0 || game.score >= MAX_SCORE) return;
+
+    const reward = game.autoLevel * multiplier();
+    const added = addScore(reward);
+
+    if (added > 0) {
+        floatingScore("+" + fmt(added) + " / сек", "passive");
+        saveGame();
+    }
+}, 1000);
+
+/* ОТПРАВКА РЕЗУЛЬТАТА В TELEGRAM */
+
+document.getElementById("saveButton
