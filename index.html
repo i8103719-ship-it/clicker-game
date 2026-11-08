@@ -1,0 +1,621 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <title>Clicker Game</title>
+
+    <!-- Telegram Mini App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+
+        :root {
+            --tg-theme-bg-color: #111323;
+            --tg-theme-text-color: #ffffff;
+            --tg-theme-hint-color: #9298b5;
+            --tg-theme-button-color: #7657ff;
+            --tg-theme-button-text-color: #ffffff;
+
+            --background: #111323;
+            --card: #1d2139;
+            --purple: #7957ff;
+            --blue: #24c8ff;
+            --gold: #ffca45;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(
+                    circle at 50% 30%,
+                    #29204f 0%,
+                    #17192d 45%,
+                    #101222 100%
+                );
+
+            color: var(--tg-theme-text-color);
+            font-family: Arial, sans-serif;
+
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+
+            margin: auto;
+            padding: 25px 20px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Заголовок */
+
+        .header {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: 2px;
+
+            background: linear-gradient(
+                90deg,
+                #ffffff,
+                #a58aff,
+                #35d9ff
+            );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            margin-top: 8px;
+            color: var(--tg-theme-hint-color);
+            font-size: 14px;
+        }
+
+        /* Карточка баланса */
+
+        .balance-card {
+            width: 100%;
+
+            background: linear-gradient(
+                135deg,
+                #29284f,
+                #202541
+            );
+
+            border: 1px solid rgba(140, 110, 255, 0.3);
+
+            border-radius: 24px;
+
+            padding: 24px 15px;
+
+            text-align: center;
+
+            box-shadow:
+                0 10px 40px rgba(0, 0, 0, 0.3),
+                0 0 25px rgba(120, 80, 255, 0.1);
+        }
+
+        .balance-label {
+            color: #a6a8c5;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .balance {
+            font-size: 43px;
+            font-weight: 900;
+
+            margin-top: 10px;
+
+            background: linear-gradient(
+                90deg,
+                #ffe28a,
+                #ffae28
+            );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            font-variant-numeric: tabular-nums;
+        }
+
+        .balance-unit {
+            color: #ffc95a;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* Область клика */
+
+        .click-area {
+            width: 100%;
+            flex: 1;
+
+            min-height: 320px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            position: relative;
+        }
+
+        .coin-button {
+            width: 245px;
+            height: 245px;
+
+            border: none;
+            outline: none;
+            background: transparent;
+
+            cursor: pointer;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            transition: transform 0.12s ease;
+
+            filter: drop-shadow(
+                0 0 20px rgba(255, 190, 45, 0.4)
+            );
+
+            touch-action: manipulation;
+        }
+
+        .coin-button img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: contain;
+
+            pointer-events: none;
+
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        .coin-button:active {
+            transform: scale(0.88);
+        }
+
+        .coin-button:active img {
+            animation: none;
+        }
+
+        @keyframes floating {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-9px);
+            }
+        }
+
+        /* Надпись под монетой */
+
+        .click-hint {
+            color: #a6a8c5;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+
+        /* Анимация +1 */
+
+        .floating-score {
+            position: absolute;
+
+            color: #ffe078;
+
+            font-size: 30px;
+            font-weight: 900;
+
+            pointer-events: none;
+
+            animation: scoreUp 0.8s ease-out forwards;
+
+            z-index: 10;
+
+            text-shadow:
+                0 0 10px #ffb52c,
+                0 0 25px #ff8a00;
+        }
+
+        @keyframes scoreUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(0.7);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.5);
+            }
+        }
+
+        /* Кнопка сохранения */
+
+        .save-button {
+            width: 100%;
+
+            min-height: 60px;
+
+            border: none;
+            border-radius: 18px;
+
+            background: linear-gradient(
+                100deg,
+                #7253ff,
+                #9a54ff
+            );
+
+            color: #ffffff;
+
+            font-size: 17px;
+            font-weight: 800;
+
+            cursor: pointer;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 12px;
+
+            box-shadow:
+                0 5px 25px rgba(120, 70, 255, 0.35);
+
+            transition: 0.2s ease;
+        }
+
+        .save-button:active {
+            transform: scale(0.97);
+        }
+
+        .save-button img {
+            width: 24px;
+            height: 24px;
+
+            object-fit: contain;
+
+            filter: brightness(0) invert(1);
+        }
+
+        /* Нижняя информация */
+
+        .footer {
+            width: 100%;
+            text-align: center;
+
+            color: #737b9d;
+
+            font-size: 12px;
+
+            margin-top: 18px;
+        }
+
+        /* Адаптация */
+
+        @media (max-width: 380px) {
+
+            .coin-button {
+                width: 205px;
+                height: 205px;
+            }
+
+            .balance {
+                font-size: 36px;
+            }
+
+            .container {
+                padding: 20px 15px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <!-- Заголовок -->
+
+        <header class="header">
+
+            <div class="logo">
+                CLICKER
+            </div>
+
+            <div class="subtitle">
+                Нажимай и зарабатывай очки
+            </div>
+
+        </header>
+
+
+        <!-- Баланс -->
+
+        <section class="balance-card">
+
+            <div class="balance-label">
+                ТВОЙ БАЛАНС
+            </div>
+
+            <div class="balance" id="balance">
+                0
+            </div>
+
+            <div class="balance-unit">
+                ОЧКОВ
+            </div>
+
+        </section>
+
+
+        <!-- Основная кнопка -->
+
+        <section class="click-area" id="clickArea">
+
+            <button
+                class="coin-button"
+                id="coinButton"
+                aria-label="Нажать на монету"
+            >
+
+                <img
+                    src="https://images.unsplash.com/photo-1610375461246-83df859d849d?w=600&auto=format&fit=crop&q=85"
+                    alt="Золотая монета"
+                    draggable="false"
+                >
+
+            </button>
+
+            <div class="click-hint">
+                Нажми на монету
+            </div>
+
+        </section>
+
+
+        <!-- Сохранение результата -->
+
+        <button
+            class="save-button"
+            id="saveButton"
+        >
+
+            <img
+                src="https://cdn.jsdelivr.net/npm/lucide-static@0.468.0/icons/save.svg"
+                alt=""
+            >
+
+            Сохранить результат
+
+        </button>
+
+
+        <!-- Нижняя информация -->
+
+        <footer class="footer">
+
+            Ваш прогресс сохраняется автоматически
+
+        </footer>
+
+    </main>
+
+
+    <script>
+
+        // =====================================
+        // TELEGRAM MINI APP
+        // =====================================
+
+        const tg = window.Telegram?.WebApp;
+
+        if (tg) {
+            tg.ready();
+            tg.expand();
+
+            // Используем цветовую тему Telegram.
+            document.body.style.backgroundColor =
+                tg.themeParams.bg_color || "#111323";
+        }
+
+
+        // =====================================
+        // ПЕРЕМЕННЫЕ
+        // =====================================
+
+        const balanceElement =
+            document.getElementById("balance");
+
+        const coinButton =
+            document.getElementById("coinButton");
+
+        const saveButton =
+            document.getElementById("saveButton");
+
+        const clickArea =
+            document.getElementById("clickArea");
+
+        const STORAGE_KEY = "clicker_game_score";
+
+
+        // =====================================
+        // ЗАГРУЗКА СОХРАНЕННОГО БАЛАНСА
+        // =====================================
+
+        let currentScore = 0;
+
+        try {
+            const savedScore = localStorage.getItem(STORAGE_KEY);
+
+            if (
+                savedScore !== null &&
+                /^\d+$/.test(savedScore)
+            ) {
+                currentScore = Number(savedScore);
+
+                if (!Number.isSafeInteger(currentScore)) {
+                    currentScore = 0;
+                }
+            }
+
+        } catch (error) {
+            console.error("Ошибка загрузки:", error);
+        }
+
+
+        // =====================================
+        // ОБНОВЛЕНИЕ СЧЕТЧИКА
+        // =====================================
+
+        function updateBalance() {
+
+            balanceElement.textContent =
+                currentScore.toLocaleString("ru-RU");
+
+            try {
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    String(currentScore)
+                );
+
+            } catch (error) {
+                console.error("Ошибка сохранения:", error);
+            }
+        }
+
+
+        // =====================================
+        // АНИМАЦИЯ +1
+        // =====================================
+
+        function showFloatingScore() {
+
+            const element =
+                document.createElement("div");
+
+            element.className = "floating-score";
+
+            element.textContent = "+1";
+
+            element.style.left =
+                (clickArea.offsetWidth / 2 - 20) + "px";
+
+            element.style.top =
+                (clickArea.offsetHeight / 2 - 30) + "px";
+
+            clickArea.appendChild(element);
+
+            setTimeout(() => {
+                element.remove();
+            }, 800);
+        }
+
+
+        // =====================================
+        // ОБРАБОТЧИК КЛИКА
+        // =====================================
+
+        coinButton.addEventListener("click", () => {
+
+            // Защита от переполнения.
+            if (currentScore >= Number.MAX_SAFE_INTEGER) {
+                return;
+            }
+
+            // Добавляем одно очко.
+            currentScore++;
+
+            // Обновляем интерфейс.
+            updateBalance();
+
+            // Показываем анимацию.
+            showFloatingScore();
+
+            // Вибрация Telegram.
+            if (
+                tg &&
+                tg.HapticFeedback
+            ) {
+                tg.HapticFeedback.impactOccurred("light");
+            }
+
+        });
+
+
+        // =====================================
+        // СОХРАНЕНИЕ РЕЗУЛЬТАТА
+        // =====================================
+
+        saveButton.addEventListener("click", () => {
+
+            // Сначала сохраняем локально.
+            updateBalance();
+
+            // Проверяем запуск внутри Telegram.
+            if (!tg || !tg.sendData) {
+
+                alert(
+                    "Открой игру через Telegram, чтобы отправить результат."
+                );
+
+                return;
+            }
+
+            // Формируем JSON.
+            const result = {
+                score: currentScore
+            };
+
+            // Отправляем результат боту.
+            tg.sendData(JSON.stringify(result));
+
+            // Закрываем Mini App.
+            tg.close();
+
+        });
+
+
+        // =====================================
+        // ПЕРВОНАЧАЛЬНАЯ ИНИЦИАЛИЗАЦИЯ
+        // =====================================
+
+        updateBalance();
+
+    </script>
+
+</body>
+
+</html>
