@@ -1,19 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 
 <head>
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <title>CLICKER GAME</title>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <style>
-
         :root {
             --tg-theme-bg-color: #111323;
             --tg-theme-text-color: #ffffff;
@@ -24,6 +20,7 @@
             --purple: #7957ff;
             --blue: #24c8ff;
             --gold: #ffca45;
+            --card: #202541;
         }
 
         * {
@@ -35,19 +32,10 @@
 
         body {
             min-height: 100vh;
-
             background:
-                radial-gradient(
-                    circle at 50% 35%,
-                    #29204f,
-                    #17192d 50%,
-                    #101222
-                );
-
+                radial-gradient(circle at 50% 35%, #29204f, #17192d 50%, #101222);
             color: var(--tg-theme-text-color);
-
             font-family: Arial, sans-serif;
-
             overflow-x: hidden;
             user-select: none;
         }
@@ -56,10 +44,8 @@
             width: 100%;
             max-width: 480px;
             min-height: 100vh;
-
             margin: auto;
-            padding: 25px 20px;
-
+            padding: 22px 16px 30px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -70,27 +56,20 @@
         .header {
             width: 100%;
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 22px;
         }
 
         .logo {
             font-size: 34px;
             font-weight: 900;
             letter-spacing: 3px;
-
-            background: linear-gradient(
-                90deg,
-                #ffffff,
-                #a58aff,
-                #35d9ff
-            );
-
+            background: linear-gradient(90deg, #fff, #a58aff, #35d9ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
-            margin-top: 8px;
+            margin-top: 7px;
             color: var(--tg-theme-hint-color);
             font-size: 14px;
         }
@@ -99,20 +78,11 @@
 
         .balance-card {
             width: 100%;
-
-            background: linear-gradient(
-                135deg,
-                #29284f,
-                #202541
-            );
-
+            background: linear-gradient(135deg, #29284f, #202541);
             border: 1px solid rgba(140, 110, 255, 0.3);
-
             border-radius: 24px;
-            padding: 24px 15px;
-
+            padding: 22px 15px;
             text-align: center;
-
             box-shadow:
                 0 10px 40px rgba(0, 0, 0, 0.3),
                 0 0 25px rgba(120, 80, 255, 0.1);
@@ -127,18 +97,10 @@
         .balance {
             font-size: 43px;
             font-weight: 900;
-
-            margin-top: 10px;
-
-            background: linear-gradient(
-                90deg,
-                #ffe28a,
-                #ffae28
-            );
-
+            margin-top: 8px;
+            background: linear-gradient(90deg, #ffe28a, #ffae28);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-
             font-variant-numeric: tabular-nums;
         }
 
@@ -148,55 +110,67 @@
             margin-top: 5px;
         }
 
-        /* ОБЛАСТЬ КЛИКА */
+        /* СТАТИСТИКА */
+
+        .stats {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .stat-card {
+            background: rgba(35, 39, 68, 0.9);
+            border: 1px solid rgba(130, 120, 255, 0.18);
+            border-radius: 14px;
+            padding: 12px 5px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 17px;
+            font-weight: 900;
+            color: #ffce63;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: #9298b5;
+            margin-top: 5px;
+        }
+
+        /* ОБЛАСТЬ МОНЕТЫ */
 
         .click-area {
             width: 100%;
-            flex: 1;
-            min-height: 340px;
-
+            min-height: 310px;
             display: flex;
             flex-direction: column;
-
             justify-content: center;
             align-items: center;
-
             position: relative;
         }
-
-        /* КНОПКА МОНЕТЫ */
 
         .coin-button {
             width: 245px;
             height: 245px;
-
             border: none;
             outline: none;
             background: transparent;
-
             cursor: pointer;
-
             display: flex;
             justify-content: center;
             align-items: center;
-
             transition: transform 0.12s ease;
-
             touch-action: manipulation;
-
-            filter: drop-shadow(
-                0 0 20px rgba(255, 190, 45, 0.4)
-            );
+            filter: drop-shadow(0 0 20px rgba(255, 190, 45, 0.4));
         }
-
-        /* КРУГЛАЯ ЗОЛОТАЯ МОНЕТА */
 
         .coin-art {
             width: 220px;
             height: 220px;
-
             border-radius: 50%;
-
             background: linear-gradient(
                 135deg,
                 #fff4a3 0%,
@@ -205,36 +179,24 @@
                 #ffcf42 65%,
                 #a95b08 100%
             );
-
             padding: 11px;
-
             border: 4px solid #ffe78a;
-
             box-shadow:
                 0 0 15px #ffca45,
                 0 0 40px rgba(255, 174, 30, 0.6),
                 inset 0 0 15px #fff2a3,
                 inset 0 0 30px #a45a00;
-
             display: flex;
             justify-content: center;
             align-items: center;
-
             animation: floating 3s ease-in-out infinite;
-
-            position: relative;
         }
-
-        /* ВНУТРЕННЯЯ ЧАСТЬ */
 
         .coin-inner {
             width: 100%;
             height: 100%;
-
             border-radius: 50%;
-
             border: 5px solid #bd760e;
-
             background: radial-gradient(
                 circle at 35% 25%,
                 #fff4a1,
@@ -242,30 +204,22 @@
                 #e99b19 75%,
                 #a85c08
             );
-
             display: flex;
             justify-content: center;
             align-items: center;
-
             box-shadow:
                 inset 0 0 12px #fff4a1,
                 inset 0 0 25px #b56a0b;
         }
 
-        /* БУКВА НА МОНЕТЕ */
-
         .coin-letter {
             font-size: 105px;
             font-weight: 900;
-
             color: #a95c08;
-
             text-shadow:
                 2px 3px 0 #fff0a0,
                 4px 5px 4px rgba(80, 40, 0, 0.5);
         }
-
-        /* НАЖАТИЕ */
 
         .coin-button:active {
             transform: scale(0.88);
@@ -279,39 +233,45 @@
             0%, 100% {
                 transform: translateY(0);
             }
-
             50% {
                 transform: translateY(-9px);
             }
         }
 
-        /* ПОДСКАЗКА */
-
         .click-hint {
             color: #a6a8c5;
-            font-size: 15px;
-            margin-top: 20px;
+            font-size: 14px;
+            margin-top: 15px;
         }
 
-        /* АНИМАЦИЯ +1 */
+        /* ВСПЛЫВАЮЩИЕ ОЧКИ */
 
         .floating-score {
             position: absolute;
-
             color: #ffe078;
-
-            font-size: 30px;
+            font-size: 28px;
             font-weight: 900;
-
             pointer-events: none;
+            animation: scoreUp 0.85s ease-out forwards;
+            z-index: 20;
+            white-space: nowrap;
+            text-shadow: 0 0 10px #ffb52c, 0 0 25px #ff8a00;
+        }
 
-            animation: scoreUp 0.8s ease-out forwards;
-
-            z-index: 10;
-
+        .floating-score.critical {
+            color: #ff65e8;
+            font-size: 31px;
             text-shadow:
-                0 0 10px #ffb52c,
-                0 0 25px #ff8a00;
+                0 0 10px #ff65e8,
+                0 0 25px #a82dff;
+        }
+
+        .floating-score.passive {
+            color: #52e8ff;
+            font-size: 20px;
+            text-shadow:
+                0 0 10px #24c8ff,
+                0 0 25px #247aff;
         }
 
         @keyframes scoreUp {
@@ -319,11 +279,154 @@
                 opacity: 1;
                 transform: translateY(0) scale(0.7);
             }
-
             100% {
                 opacity: 0;
                 transform: translateY(-100px) scale(1.5);
             }
+        }
+
+        /* МАГАЗИН */
+
+        .shop {
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .shop-title {
+            font-size: 21px;
+            font-weight: 900;
+        }
+
+        .shop-subtitle {
+            font-size: 11px;
+            color: #9298b5;
+            margin-top: 5px;
+        }
+
+        .shop-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .upgrade-card {
+            width: 100%;
+            background: linear-gradient(135deg, #252a49, #1b2038);
+            border: 1px solid rgba(130, 120, 255, 0.22);
+            border-radius: 19px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.16);
+            transition: border-color 0.2s ease;
+        }
+
+        .upgrade-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .upgrade-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #5144a0, #302b69);
+            border: 1px solid rgba(160, 140, 255, 0.3);
+        }
+
+        .upgrade-icon svg {
+            width: 27px;
+            height: 27px;
+            stroke: #d9ccff;
+            stroke-width: 1.8;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .upgrade-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .upgrade-name {
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .upgrade-level {
+            display: inline-block;
+            margin-top: 5px;
+            color: #b9a5ff;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .upgrade-description {
+            color: #969fbd;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .upgrade-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .upgrade-effect {
+            color: #65d9ff;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .upgrade-button {
+            border: none;
+            border-radius: 12px;
+            padding: 11px 15px;
+            min-width: 125px;
+            background: linear-gradient(100deg, #7354ff, #9956ff);
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .upgrade-button:active:not(:disabled) {
+            transform: scale(0.95);
+        }
+
+        .upgrade-button:disabled {
+            background: #383d56;
+            color: #777f9b;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .upgrade-button .price {
+            display: block;
+            margin-top: 4px;
+            color: #ffe18b;
+            font-size: 11px;
+        }
+
+        .upgrade-button:disabled .price {
+            color: #9298b5;
         }
 
         /* КНОПКА СОХРАНЕНИЯ */
@@ -331,32 +434,19 @@
         .save-button {
             width: 100%;
             min-height: 60px;
-
+            margin-top: 22px;
             border: none;
             border-radius: 18px;
-
-            background: linear-gradient(
-                100deg,
-                #7253ff,
-                #9a54ff
-            );
-
+            background: linear-gradient(100deg, #7253ff, #9a54ff);
             color: #ffffff;
-
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 800;
-
             cursor: pointer;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             gap: 12px;
-
-            box-shadow:
-                0 5px 25px rgba(120, 70, 255, 0.35);
-
+            box-shadow: 0 5px 25px rgba(120, 70, 255, 0.35);
             transition: 0.2s ease;
         }
 
@@ -364,34 +454,28 @@
             transform: scale(0.97);
         }
 
-        .save-button img {
-            width: 24px;
-            height: 24px;
-
-            object-fit: contain;
-
-            filter: brightness(0) invert(1);
+        .save-button svg {
+            width: 22px;
+            height: 22px;
+            stroke: white;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
-
-        /* НИЖНЯЯ ИНФОРМАЦИЯ */
 
         .footer {
             width: 100%;
-
             text-align: center;
-
             color: #737b9d;
-
-            font-size: 12px;
-
-            margin-top: 18px;
+            font-size: 11px;
+            margin-top: 16px;
             margin-bottom: 10px;
         }
 
-        /* МОБИЛЬНАЯ АДАПТАЦИЯ */
+        /* АДАПТАЦИЯ */
 
         @media (max-width: 380px) {
-
             .coin-button {
                 width: 205px;
                 height: 205px;
@@ -411,12 +495,15 @@
             }
 
             .container {
-                padding: 20px 15px;
+                padding: 20px 13px 25px;
+            }
+
+            .upgrade-card {
+                padding: 12px;
             }
         }
 
     </style>
-
 </head>
 
 <body>
@@ -427,9 +514,7 @@
 
         <header class="header">
 
-            <div class="logo">
-                CLICKER
-            </div>
+            <div class="logo">CLICKER</div>
 
             <div class="subtitle">
                 Нажимай и зарабатывай очки
@@ -446,9 +531,7 @@
                 ТВОЙ БАЛАНС
             </div>
 
-            <div class="balance" id="balance">
-                0
-            </div>
+            <div class="balance" id="balance">0</div>
 
             <div class="balance-unit">
                 ОЧКОВ
@@ -457,7 +540,29 @@
         </section>
 
 
-        <!-- КНОПКА МОНЕТЫ -->
+        <!-- СТАТИСТИКА -->
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <div class="stat-value" id="clickStat">1</div>
+                <div class="stat-label">ЗА КЛИК</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value" id="autoStat">0</div>
+                <div class="stat-label">В СЕКУНДУ</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value" id="critStat">0%</div>
+                <div class="stat-label">КРИТ. ШАНС</div>
+            </div>
+
+        </section>
+
+
+        <!-- МОНЕТА -->
 
         <section class="click-area" id="clickArea">
 
@@ -470,11 +575,7 @@
                 <div class="coin-art">
 
                     <div class="coin-inner">
-
-                        <div class="coin-letter">
-                            C
-                        </div>
-
+                        <div class="coin-letter">C</div>
                     </div>
 
                 </div>
@@ -488,230 +589,183 @@
         </section>
 
 
-        <!-- СОХРАНЕНИЕ -->
+        <!-- МАГАЗИН УЛУЧШЕНИЙ -->
 
-        <button
-            class="save-button"
-            id="saveButton"
-        >
+        <section class="shop">
 
-            <img
-                src="https://cdn.jsdelivr.net/npm/lucide-static@0.468.0/icons/save.svg"
-                alt=""
-            >
+            <div class="shop-header">
 
-            Сохранить результат
+                <div>
+                    <div class="shop-title">
+                        Магазин улучшений
+                    </div>
 
-        </button>
+                    <div class="shop-subtitle">
+                        Улучшай способности и зарабатывай больше
+                    </div>
+                </div>
 
+            </div>
 
-        <!-- ПОДВАЛ -->
 
-        <footer class="footer">
+            <div class="shop-cards">
 
-            Ваш прогресс сохраняется автоматически
+                <!-- СИЛА КЛИКА -->
 
-        </footer>
+                <article class="upgrade-card">
 
-    </main>
+                    <div class="upgrade-top">
 
+                        <div class="upgrade-icon">
 
-    <script>
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 2v4"/>
+                                <path d="M12 18v4"/>
+                                <path d="M4.93 4.93l2.83 2.83"/>
+                                <path d="M16.24 16.24l2.83 2.83"/>
+                                <path d="M2 12h4"/>
+                                <path d="M18 12h4"/>
+                                <path d="M4.93 19.07l2.83-2.83"/>
+                                <path d="M16.24 7.76l2.83-2.83"/>
+                                <circle cx="12" cy="12" r="4"/>
+                            </svg>
 
-        // =====================================
-        // TELEGRAM MINI APP
-        // =====================================
+                        </div>
 
-        const tg = window.Telegram?.WebApp;
+                        <div class="upgrade-info">
 
-        if (tg) {
+                            <div class="upgrade-name">
+                                Сила клика
+                            </div>
 
-            tg.ready();
+                            <div class="upgrade-level" id="clickLevel">
+                                Уровень 0
+                            </div>
 
-            tg.expand();
+                        </div>
 
-            tg.setHeaderColor("#111323");
+                    </div>
 
-            tg.setBackgroundColor("#111323");
+                    <div class="upgrade-description">
+                        Увеличивает количество очков за одно нажатие на монету.
+                    </div>
 
-        }
+                    <div class="upgrade-bottom">
 
+                        <div class="upgrade-effect" id="clickEffect">
+                            +1 очко за клик
+                        </div>
 
-        // =====================================
-        // ПЕРЕМЕННЫЕ
-        // =====================================
+                        <button
+                            class="upgrade-button"
+                            id="clickBuy"
+                            onclick="buyUpgrade('click')"
+                        >
+                            Улучшить
+                            <span class="price" id="clickPrice">100 очков</span>
+                        </button>
 
-        const balanceElement =
-            document.getElementById("balance");
+                    </div>
 
-        const coinButton =
-            document.getElementById("coinButton");
+                </article>
 
-        const saveButton =
-            document.getElementById("saveButton");
 
-        const clickArea =
-            document.getElementById("clickArea");
+                <!-- АВТОКЛИКЕР -->
 
-        const STORAGE_KEY = "clicker_game_score";
+                <article class="upgrade-card">
 
+                    <div class="upgrade-top">
 
-        // =====================================
-        // ЗАГРУЗКА БАЛАНСА
-        // =====================================
+                        <div class="upgrade-icon">
 
-        let currentScore = 0;
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="9"/>
+                                <path d="M12 7v5l3 2"/>
+                                <path d="M8 2h8"/>
+                            </svg>
 
-        try {
+                        </div>
 
-            const savedScore =
-                localStorage.getItem(STORAGE_KEY);
+                        <div class="upgrade-info">
 
-            if (
-                savedScore !== null &&
-                /^\d+$/.test(savedScore)
-            ) {
+                            <div class="upgrade-name">
+                                Автокликер
+                            </div>
 
-                const parsedScore = Number(savedScore);
+                            <div class="upgrade-level" id="autoLevel">
+                                Уровень 0
+                            </div>
 
-                if (Number.isSafeInteger(parsedScore)) {
-                    currentScore = parsedScore;
-                }
+                        </div>
 
-            }
+                    </div>
 
-        } catch (error) {
+                    <div class="upgrade-description">
+                        Автоматически начисляет очки каждую секунду, даже без нажатий.
+                    </div>
 
-            console.error("Ошибка загрузки:", error);
+                    <div class="upgrade-bottom">
 
-        }
+                        <div class="upgrade-effect" id="autoEffect">
+                            +0 очков/сек
+                        </div>
 
+                        <button
+                            class="upgrade-button"
+                            id="autoBuy"
+                            onclick="buyUpgrade('auto')"
+                        >
+                            Улучшить
+                            <span class="price" id="autoPrice">100 очков</span>
+                        </button>
 
-        // =====================================
-        // ОБНОВЛЕНИЕ БАЛАНСА
-        // =====================================
+                    </div>
 
-        function updateBalance() {
+                </article>
 
-            balanceElement.textContent =
-                currentScore.toLocaleString("ru-RU");
 
-            try {
+                <!-- КРИТИЧЕСКИЙ УДАР -->
 
-                localStorage.setItem(
-                    STORAGE_KEY,
-                    String(currentScore)
-                );
+                <article class="upgrade-card">
 
-            } catch (error) {
+                    <div class="upgrade-top">
 
-                console.error("Ошибка сохранения:", error);
+                        <div class="upgrade-icon">
 
-            }
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/>
+                                <path d="M19 14l1.3 3.2L23 18l-2.7 1.1L19 22l-1.2-2.9L15 18l2.8-.8L19 14z"/>
+                            </svg>
 
-        }
+                        </div>
 
+                        <div class="upgrade-info">
 
-        // =====================================
-        // АНИМАЦИЯ +1
-        // =====================================
+                            <div class="upgrade-name">
+                                Критический удар
+                            </div>
 
-        function showFloatingScore() {
+                            <div class="upgrade-level" id="critLevel">
+                                Уровень 0
+                            </div>
 
-            const element =
-                document.createElement("div");
+                        </div>
 
-            element.className = "floating-score";
+                    </div>
 
-            element.textContent = "+1";
+                    <div class="upgrade-description">
+                        Повышает шанс получить в 10 раз больше очков за клик.
+                    </div>
 
-            element.style.left =
-                (clickArea.offsetWidth / 2 - 20) + "px";
+                    <div class="upgrade-bottom">
 
-            element.style.top =
-                (clickArea.offsetHeight / 2 - 30) + "px";
+                        <div class="upgrade-effect" id="critEffect">
+                            Шанс: 0% | x10
+                        </div>
 
-            clickArea.appendChild(element);
-
-            setTimeout(() => {
-
-                element.remove();
-
-            }, 800);
-
-        }
-
-
-        // =====================================
-        // ОБРАБОТЧИК НАЖАТИЯ НА МОНЕТУ
-        // =====================================
-
-        coinButton.addEventListener("click", () => {
-
-            if (currentScore >= Number.MAX_SAFE_INTEGER) {
-                return;
-            }
-
-            // Добавляем одно очко.
-            currentScore++;
-
-            // Обновляем баланс.
-            updateBalance();
-
-            // Показываем +1.
-            showFloatingScore();
-
-            // Вибрация Telegram.
-            if (tg && tg.HapticFeedback) {
-
-                tg.HapticFeedback.impactOccurred("light");
-
-            }
-
-        });
-
-
-        // =====================================
-        // СОХРАНЕНИЕ РЕЗУЛЬТАТА
-        // =====================================
-
-        saveButton.addEventListener("click", () => {
-
-            // Сохраняем текущий баланс.
-            updateBalance();
-
-            // Проверяем Telegram.
-            if (!tg || !tg.sendData) {
-
-                alert(
-                    "Открой игру через Telegram, чтобы отправить результат."
-                );
-
-                return;
-
-            }
-
-            // Отправляем результат боту.
-            const result = {
-                score: currentScore
-            };
-
-            tg.sendData(JSON.stringify(result));
-
-            // Закрываем Mini App.
-            tg.close();
-
-        });
-
-
-        // =====================================
-        // ЗАПУСК
-        // =====================================
-
-        updateBalance();
-
-    </script>
-
-</body>
-
-</html>
+                        <button
+                            class="upgrade-button"
+                            id="critBuy"
+                            onclick="buyUpgrade('crit')"
+                        >
+             
